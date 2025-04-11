@@ -1,7 +1,7 @@
 class BoardsController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
-  before_action :set_board, only: [:show, :edit, :update, :destroy]
-  before_action :authorize_user!, only: [:edit, :update, :destroy]
+  before_action :authenticate_user!, except: [ :index ]
+  before_action :set_board, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_user!, only: [ :edit, :update, :destroy ]
 
   def index
     @boards = Board.includes(:user).order(created_at: :desc)
@@ -17,7 +17,7 @@ class BoardsController < ApplicationController
   def create
     @board = current_user.boards.build(board_params)
     if @board.save
-      redirect_to boards_path, notice: '投稿が作成されました。'
+      redirect_to boards_path, notice: "投稿が作成されました。"
     else
       render :new
     end
@@ -28,7 +28,7 @@ class BoardsController < ApplicationController
 
   def update
     if @board.update(board_params)
-      redirect_to boards_path, notice: '投稿が更新されました。'
+      redirect_to boards_path, notice: "投稿が更新されました。"
     else
       render :edit
     end
@@ -36,7 +36,7 @@ class BoardsController < ApplicationController
 
   def destroy
     @board.destroy
-    redirect_to boards_path, notice: '投稿を削除しました。'
+    redirect_to boards_path, notice: "投稿を削除しました。"
   end
 
   private
@@ -47,7 +47,7 @@ class BoardsController < ApplicationController
 
   def authorize_user!
     unless @board.user == current_user
-      redirect_to boards_path, alert: '他のユーザーの投稿を編集・削除することはできません。'
+      redirect_to boards_path, alert: "他のユーザーの投稿を編集・削除することはできません。"
     end
   end
 
