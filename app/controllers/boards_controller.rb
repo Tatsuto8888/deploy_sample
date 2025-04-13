@@ -1,7 +1,6 @@
 class BoardsController < ApplicationController
   before_action :authenticate_user!, except: [ :index ]
   before_action :set_board, only: [ :show, :edit, :update, :destroy ]
-  before_action :authorize_user!, only: [ :edit, :update, :destroy ]
 
   def index
     @boards = Board.includes(:user).order(created_at: :desc)
@@ -42,13 +41,8 @@ class BoardsController < ApplicationController
   private
 
   def set_board
-    @board = Board.find(params[:id])
-  end
-
-  def authorize_user!
-    unless @board.user == current_user
-      redirect_to boards_path, alert: "他のユーザーの投稿を編集・削除することはできません。"
-    end
+    @board = current_user.boards.find_by(id: params[:id])
+    redirect_to root_path, alert: "この投稿にはアクセスできません。" unless @board
   end
 
   def board_params
