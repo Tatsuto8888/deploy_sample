@@ -1,12 +1,15 @@
 class BoardsController < ApplicationController
-  before_action :authenticate_user!, except: [ :index ]
-  before_action :set_board, only: [ :show, :edit, :update, :destroy ]
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :set_board, only: [ :edit, :update, :destroy ]
 
   def index
     @boards = Board.includes(:user).order(created_at: :desc)
   end
 
   def show
+    @board = Board.find(params[:id])
+    @comment = Comment.new
+    @comments = @board.comments.includes(:user).order(created_at: :desc)
   end
 
   def new
