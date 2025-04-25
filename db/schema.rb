@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_04_22_161355) do
+ActiveRecord::Schema[7.2].define(version: 2025_04_23_233653) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "board_tags", force: :cascade do |t|
+    t.bigint "board_id", null: false
+    t.bigint "tag_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["board_id", "tag_id"], name: "index_board_tags_on_board_id_and_tag_id", unique: true
+    t.index ["board_id"], name: "index_board_tags_on_board_id"
+    t.index ["tag_id"], name: "index_board_tags_on_tag_id"
+  end
 
   create_table "boards", force: :cascade do |t|
     t.string "amount"
@@ -50,6 +60,13 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_22_161355) do
     t.index ["goal_id"], name: "index_savings_on_goal_id"
   end
 
+  create_table "tags", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
@@ -65,6 +82,8 @@ ActiveRecord::Schema[7.2].define(version: 2025_04_22_161355) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "board_tags", "boards"
+  add_foreign_key "board_tags", "tags"
   add_foreign_key "boards", "users"
   add_foreign_key "comments", "boards"
   add_foreign_key "comments", "users"

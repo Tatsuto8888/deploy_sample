@@ -1,6 +1,6 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_comment, only: [:edit, :update, :destroy]
+  before_action :set_comment, only: [ :edit, :update, :destroy ]
 
   def create
     @board = Board.find(params[:board_id])
@@ -8,9 +8,9 @@ class CommentsController < ApplicationController
     @comment.user = current_user
 
     if @comment.save
-      redirect_to board_path(@board), notice: 'コメントを投稿しました。'
+      redirect_to board_path(@board), notice: "コメントを投稿しました。"
     else
-      redirect_to board_path(@board), alert: 'コメントの投稿に失敗しました。'
+      redirect_to board_path(@board), alert: "コメントの投稿に失敗しました。"
     end
   end
 
@@ -19,7 +19,7 @@ class CommentsController < ApplicationController
 
   def update
     if @comment.update(comment_params)
-      redirect_to board_path(@comment.board), notice: 'コメントが更新されました。'
+      redirect_to board_path(@comment.board), notice: "コメントが更新されました。"
     else
       render :edit
     end
@@ -28,7 +28,7 @@ class CommentsController < ApplicationController
   def destroy
     @board = @comment.board
     @comment.destroy
-    redirect_to board_path(@comment.board), notice: 'コメントを削除しました。'
+    redirect_to board_path(@comment.board), notice: "コメントを削除しました。"
   end
 
   private
